@@ -14,11 +14,7 @@ async function postNewMsg(user, text) {
   // code goes here
 }
 
-/*
- *
- * your code goes here
- *
- */
+const ws = new WebSocket("ws://localhost:8080", ["json"]);
 
 function render() {
   const html = allChat.map(({ user, text }) => template(user, text));
