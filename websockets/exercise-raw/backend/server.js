@@ -41,6 +41,14 @@ server.on("upgrade", function (req, socket) {
     "Sec-WebSocket-Protocol: json",
     "\r\n",
   ];
+
+  socket.write(headers.join("\r\n"));
+
+  socket.write(objToResponse({ msg: getMsgs() }));
+
+  socket.on("data", (buffer) => {
+    console.log(buffer);
+  });
 });
 
 const port = process.env.PORT || 8080;
