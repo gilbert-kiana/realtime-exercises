@@ -45,9 +45,23 @@ server.on("upgrade", function (req, socket) {
   socket.write(headers.join("\r\n"));
 
   socket.write(objToResponse({ msg: getMsgs() }));
+  connections.push(socket);
 
   socket.on("data", (buffer) => {
-    console.log(buffer);
+    if (message) {
+      const message = parseMessage(buffer);
+      msg.push({
+        user: message.user,
+        text: message.text,
+        time: Date.now(),
+      });
+
+      connections.forEach((s) => s.write(objToResponse({ msg: getMsgs() })));
+    } else if (message === null) {
+      socket.on("end", () => {
+        connections = connections.filter((s) => s !== socket);
+      });
+    }
   });
 });
 
